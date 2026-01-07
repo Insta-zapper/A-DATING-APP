@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Heart, X, Star, MapPin, Filter, ChevronDown } from 'lucide-react';
 import { useMatch } from '../contexts/MatchContext';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.simple';
 import { DISTANCE_OPTIONS, DEFAULT_MAX_DISTANCE } from '../utils/constants';
 import { filterProfiles } from '../utils/helpers';
 

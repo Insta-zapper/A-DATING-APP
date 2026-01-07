@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin, Check, Camera } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.simple';
 
 const ProfileSetup: React.FC = () => {
   const { user, updateProfile } = useAuth();

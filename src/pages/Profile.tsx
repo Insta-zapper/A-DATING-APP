@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User, Camera, Edit2, Heart, MapPin, Calendar, Settings, LogOut } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.simple';
 import { DISTANCE_OPTIONS, COMMON_INTERESTS } from '../utils/constants';
 
 const Profile: React.FC = () => {

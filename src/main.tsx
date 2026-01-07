@@ -1,53 +1,69 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext.simple';
-import { MatchProvider } from './contexts/MatchContext';
-import Auth from './pages/Auth';
+import App from './App.tsx'
 import './index.css'
 
-console.log('Step 6: Testing with Auth component only');
+// Error boundary component
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+  errorInfo: React.ErrorInfo | null;
+}
 
-function AppRoutes() {
-  const { user, profileComplete } = useAuth();
-  console.log('AppRoutes - user:', user, 'profileComplete:', profileComplete);
-  
-  if (!user) {
-    console.log('Rendering Auth component');
-    return <Auth />;
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
-  
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#fef2f2', padding: '20px' }}>
-      <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h1 style={{ color: '#000', marginBottom: '10px' }}>A DATING! APP - Step 6</h1>
-        <p style={{ color: '#000' }}>Testing with Auth component only... User: {user?.name || 'None'}</p>
-      </div>
-      <main className="container mx-auto px-4 py-6">
-        <Routes>
-          <Route path="/discover" element={<div>Discover Page</div>} />
-          <Route path="/matches" element={<div>Matches Page</div>} />
-          <Route path="/chat/:matchId" element={<div>Chat Page</div>} />
-          <Route path="/profile" element={<div>Profile Page</div>} />
-          <Route path="/" element={<Navigate to="/discover" replace />} />
-        </Routes>
-      </main>
-    </div>
-  );
+
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('React Error Boundary caught an error:', error, errorInfo);
+    this.setState({ error, errorInfo });
+  }
+
+  render(): React.ReactNode {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '20px', textAlign: 'center', backgroundColor: '#fff', color: '#000' }}>
+          <h2>Something went wrong!</h2>
+          <details style={{ whiteSpace: 'pre-wrap', textAlign: 'left', marginTop: '20px' }}>
+            <summary>Error Details</summary>
+            <p><strong>Error:</strong> {this.state.error && this.state.error.toString()}</p>
+            <p><strong>Stack:</strong> {this.state.errorInfo && this.state.errorInfo.componentStack}</p>
+          </details>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
 }
 
-function App() {
-  return (
-    <Router>
-      <AuthProvider>
-        <MatchProvider>
-          <AppRoutes />
-        </MatchProvider>
-      </AuthProvider>
-    </Router>
-  );
-}
+// Add global error handling
+window.addEventListener('error', (event) => {
+  console.error('Global Error:', event.error);
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled Promise Rejection:', event.reason);
+});
+
+// Add debug logging
+console.log('Starting app...');
+alert('JavaScript is executing!');
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <App />
-);
+  <React.StrictMode>
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  </React.StrictMode>
+)
