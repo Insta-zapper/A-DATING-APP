@@ -22,7 +22,11 @@ function AppRoutes() {
   }
   console.log('Rendering main app with routes');
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50">
+    <div style={{ minHeight: '100vh', backgroundColor: '#fef2f2', padding: '20px' }}>
+      <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
+        <h1 style={{ color: '#000', marginBottom: '10px' }}>A DATING! APP - Test</h1>
+        <p style={{ color: '#000' }}>App is rendering! User: {user?.name || 'Unknown'}</p>
+      </div>
       <Navbar />
       <main className="container mx-auto px-4 py-6">
         <Routes>
