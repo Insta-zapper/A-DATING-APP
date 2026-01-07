@@ -100,6 +100,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
+      
+      // Create default profile immediately after login
+      const defaultProfile: UserProfile = {
+        id: newUser.id,
+        name: newUser.name,
+        age: 25,
+        bio: '',
+        hobbies: '',
+        gender: '',
+        pronouns: '',
+        interestedIn: [],
+        photos: [],
+        location: '',
+        interests: [],
+        datingIntent: 'serious',
+        ageRangeMin: 18,
+        ageRangeMax: 65,
+        maxDistance: 20
+      };
+      setProfile(defaultProfile);
+      setProfileComplete(true);
+      localStorage.setItem('profile', JSON.stringify(defaultProfile));
+      
       return true;
     }
     return false;
@@ -116,6 +139,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
+      
+      // Create default profile immediately after signup
+      const defaultProfile: UserProfile = {
+        id: newUser.id,
+        name: newUser.name,
+        age: 25,
+        bio: '',
+        hobbies: '',
+        gender: '',
+        pronouns: '',
+        interestedIn: [],
+        photos: [],
+        location: '',
+        interests: [],
+        datingIntent: 'serious',
+        ageRangeMin: 18,
+        ageRangeMax: 65,
+        maxDistance: 20
+      };
+      setProfile(defaultProfile);
+      setProfileComplete(true);
+      localStorage.setItem('profile', JSON.stringify(defaultProfile));
+      
       return true;
     }
     return false;
