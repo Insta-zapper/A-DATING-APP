@@ -26,7 +26,10 @@ const Auth: React.FC = () => {
         success = await signup(email, password, name);
       }
 
-      if (!success) {
+      if (success) {
+        // Redirect to discover page after successful auth
+        window.location.href = '/discover';
+      } else {
         setError('Authentication failed. Please try again.');
       }
     } catch (err) {
