@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Heart, X, Star, MapPin, Filter, ChevronDown } from 'lucide-react';
 import { useMatch } from '../contexts/MatchContext';
 import { useAuth } from '../contexts/AuthContext';
+import { DISTANCE_OPTIONS, DEFAULT_MAX_DISTANCE } from '../utils/constants';
+import { filterProfiles } from '../utils/helpers';
 
 // Mock data for demonstration
 const mockProfiles = [
@@ -69,50 +71,20 @@ const Discover: React.FC = () => {
   const { addMatch } = useMatch();
   
   // Filter states
-  const [ageRange, setAgeRange] = useState([18, 65]);
-  const [maxDistance, setMaxDistance] = useState(20);
+  const [ageRange, setAgeRange] = useState<[number, number]>([18, 65]);
+  const [maxDistance, setMaxDistance] = useState(DEFAULT_MAX_DISTANCE);
   const [showFilters, setShowFilters] = useState(false);
-  const [filteredProfiles, setFilteredProfiles] = useState(mockProfiles);
 
-  // Generate distance options
-  const distanceOptions = [];
-  for (let i = 5; i <= 20; i += 5) {
-    distanceOptions.push(i);
-  }
-  for (let i = 30; i <= 100; i += 10) {
-    distanceOptions.push(i);
-  }
-
-  // Filter profiles based on user preferences
-  useEffect(() => {
-    if (!profile) return;
-
-    const filtered = mockProfiles.filter(profileData => {
-      // Age filter
-      const profileAge = profileData.age;
-      if (profileAge < ageRange[0] || profileAge > ageRange[1]) {
-        return false;
-      }
-
-      // Distance filter
-      const distance = parseInt(profileData.location.split(' ')[0]);
-      if (distance > maxDistance) {
-        return false;
-      }
-
-      // Gender preference filter
-      if (profile.interestedIn && profile.interestedIn.length > 0) {
-        if (!profile.interestedIn.includes(profileData.gender)) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-
-    setFilteredProfiles(filtered);
-    setCurrentIndex(0);
+  // Memoized filtered profiles
+  const filteredProfiles = useMemo(() => {
+    if (!profile) return mockProfiles;
+    return filterProfiles(mockProfiles, ageRange, maxDistance, profile.interestedIn || []);
   }, [ageRange, maxDistance, profile]);
+
+  // Reset current index when filters change
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [filteredProfiles]);
 
   const currentProfile = filteredProfiles[currentIndex];
 
@@ -264,7 +236,7 @@ const Discover: React.FC = () => {
                 onChange={(e) => setMaxDistance(parseInt(e.target.value))}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
-                {distanceOptions.map(distance => (
+                {DISTANCE_OPTIONS.map((distance: number) => (
                   <option key={distance} value={distance}>
                     {distance} miles
                   </option>
@@ -326,7 +298,7 @@ const Discover: React.FC = () => {
             
             {/* Interests */}
             <div className="flex flex-wrap gap-2 mb-4">
-              {currentProfile.interests.map((interest, index) => (
+              {currentProfile.interests.map((interest: string, index: number) => (
                 <span 
                   key={index}
                   className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm"

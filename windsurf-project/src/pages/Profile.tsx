@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { User, MapPin, Heart, Edit2, Camera, Settings, LogOut, Calendar } from 'lucide-react';
+import { User, Camera, Edit2, Heart, MapPin, Calendar, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { DISTANCE_OPTIONS, COMMON_INTERESTS } from '../utils/constants';
 
 const Profile: React.FC = () => {
   const { user, profile, logout, updateProfile } = useAuth();
@@ -30,20 +31,6 @@ const Profile: React.FC = () => {
     }));
   };
 
-  // Generate distance options
-  const distanceOptions = [];
-  for (let i = 5; i <= 20; i += 5) {
-    distanceOptions.push(i);
-  }
-  for (let i = 30; i <= 100; i += 10) {
-    distanceOptions.push(i);
-  }
-
-  const commonInterests = [
-    'Travel', 'Cooking', 'Music', 'Movies', 'Reading', 'Fitness', 
-    'Photography', 'Art', 'Dancing', 'Hiking', 'Gaming', 'Sports',
-    'Technology', 'Fashion', 'Food', 'Wine', 'Coffee', 'Pets'
-  ];
 
   if (!user || !profile) {
     return (
@@ -228,7 +215,7 @@ const Profile: React.FC = () => {
             {isEditing ? (
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-2">
-                  {commonInterests.map(interest => (
+                  {COMMON_INTERESTS.map((interest: string) => (
                     <button
                       key={interest}
                       onClick={() => toggleInterest(interest)}
@@ -260,7 +247,7 @@ const Profile: React.FC = () => {
             ) : (
               <div className="flex flex-wrap gap-2">
                 {profile.interests.length > 0 ? (
-                  profile.interests.map((interest, index) => (
+                  COMMON_INTERESTS.map((interest: string, index: number) => (
                     <span
                       key={index}
                       className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm"
@@ -362,7 +349,7 @@ const Profile: React.FC = () => {
                     onChange={(e) => setEditData(prev => ({ ...prev, maxDistance: parseInt(e.target.value) }))}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   >
-                    {distanceOptions.map(distance => (
+                    {DISTANCE_OPTIONS.map((distance: number) => (
                       <option key={distance} value={distance}>
                         {distance} miles
                       </option>
