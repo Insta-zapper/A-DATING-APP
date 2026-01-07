@@ -7,6 +7,7 @@ const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     bio: profile?.bio || '',
+    hobbies: profile?.hobbies || '',
     interests: profile?.interests || [],
     location: profile?.location || '',
     pronouns: profile?.pronouns || ''
@@ -148,6 +149,52 @@ const Profile: React.FC = () => {
             ) : (
               <p className="text-gray-700">
                 {profile.bio || 'No bio added yet. Tell others about yourself!'}
+              </p>
+            )}
+          </div>
+
+          {/* Hobbies Section */}
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-800">Hobbies</h3>
+              {!isEditing && (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="text-primary-600 hover:text-primary-700"
+                >
+                  <Edit2 className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+
+            {isEditing ? (
+              <div className="space-y-4">
+                <textarea
+                  value={editData.hobbies}
+                  onChange={(e) => setEditData(prev => ({ ...prev, hobbies: e.target.value }))}
+                  className="input-field resize-none"
+                  rows={3}
+                  placeholder="What do you do for entertainment?"
+                  maxLength={300}
+                />
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => setIsEditing(false)}
+                    className="btn-secondary"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    className="btn-primary"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="text-gray-700">
+                {profile.hobbies || 'No hobbies added yet. Share what you enjoy doing!'}
               </p>
             )}
           </div>
