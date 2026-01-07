@@ -55,37 +55,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [profileComplete, setProfileComplete] = useState(false);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    const savedProfile = localStorage.getItem('profile');
-    
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    if (savedProfile) {
-      setProfile(JSON.parse(savedProfile));
-      setProfileComplete(true);
-    } else if (savedUser) {
-      // Create default profile for logged in users
-      const defaultProfile: UserProfile = {
-        id: JSON.parse(savedUser).id,
-        name: JSON.parse(savedUser).name,
-        age: 25,
-        bio: '',
-        hobbies: '',
-        gender: '',
-        pronouns: '',
-        interestedIn: [],
-        photos: [],
-        location: '',
-        interests: [],
-        datingIntent: 'serious',
-        ageRangeMin: 18,
-        ageRangeMax: 65,
-        maxDistance: 20
-      };
-      setProfile(defaultProfile);
-      setProfileComplete(true);
-      localStorage.setItem('profile', JSON.stringify(defaultProfile));
+    try {
+      const savedUser = localStorage.getItem('user');
+      const savedProfile = localStorage.getItem('profile');
+      
+      if (savedUser) {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+      }
+      if (savedProfile) {
+        const parsedProfile = JSON.parse(savedProfile);
+        setProfile(parsedProfile);
+        setProfileComplete(true);
+      } else if (savedUser) {
+        // Create default profile for logged in users
+        const parsedUser = JSON.parse(savedUser);
+        const defaultProfile: UserProfile = {
+          id: parsedUser.id,
+          name: parsedUser.name,
+          age: 25,
+          bio: '',
+          hobbies: '',
+          gender: '',
+          pronouns: '',
+          interestedIn: [],
+          photos: [],
+          location: '',
+          interests: [],
+          datingIntent: 'serious',
+          ageRangeMin: 18,
+          ageRangeMax: 65,
+          maxDistance: 20
+        };
+        setProfile(defaultProfile);
+        setProfileComplete(true);
+        localStorage.setItem('profile', JSON.stringify(defaultProfile));
+      }
+    } catch (error) {
+      console.error('AuthContext initialization error:', error);
     }
   }, []);
 
