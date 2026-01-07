@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Heart, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Auth: React.FC = () => {
@@ -10,6 +11,7 @@ const Auth: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [authSuccess, setAuthSuccess] = useState(false);
   
   const { login, signup } = useAuth();
 
@@ -27,8 +29,8 @@ const Auth: React.FC = () => {
       }
 
       if (success) {
-        // Redirect to discover page after successful auth
-        window.location.href = '/discover';
+        // Set auth success and let React Router handle navigation
+        setAuthSuccess(true);
       } else {
         setError('Authentication failed. Please try again.');
       }
@@ -38,6 +40,11 @@ const Auth: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // Redirect to discover page after successful auth
+  if (authSuccess) {
+    return <Navigate to="/discover" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 flex items-center justify-center px-4">
