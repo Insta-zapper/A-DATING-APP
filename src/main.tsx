@@ -58,6 +58,7 @@ window.addEventListener('unhandledrejection', (event) => {
 
 // Add debug logging
 console.log('Starting app...');
+alert('JavaScript is executing!');
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
