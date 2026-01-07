@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd windsurf-project && npm run build",
-  "outputDirectory": "windsurf-project/dist",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "framework": "vite",
   "installCommand": "npm install",
-  "devCommand": "cd windsurf-project && npm run dev"
+  "devCommand": "npm run dev"
 }
