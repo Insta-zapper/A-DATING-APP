@@ -12,6 +12,7 @@ interface UserProfile {
   name: string;
   age: number;
   bio: string;
+  hobbies: string;
   gender: string;
   pronouns: string;
   interestedIn: string[];
@@ -19,6 +20,9 @@ interface UserProfile {
   location: string;
   interests: string[];
   datingIntent: 'serious' | 'marriage';
+  ageRangeMin: number;
+  ageRangeMax: number;
+  maxDistance: number;
 }
 
 interface AuthContextType {
@@ -110,13 +114,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         name: profileData.name || user.name,
         age: profileData.age || 25,
         bio: profileData.bio || '',
+        hobbies: profileData.hobbies || '',
         gender: profileData.gender || '',
         pronouns: profileData.pronouns || '',
         interestedIn: profileData.interestedIn || [],
         photos: profileData.photos || [],
         location: profileData.location || '',
         interests: profileData.interests || [],
-        datingIntent: profileData.datingIntent || 'serious'
+        datingIntent: profileData.datingIntent || 'serious',
+        ageRangeMin: profileData.ageRangeMin || 18,
+        ageRangeMax: profileData.ageRangeMax || 65,
+        maxDistance: profileData.maxDistance || 20
       };
       
       setProfile(updatedProfile);
