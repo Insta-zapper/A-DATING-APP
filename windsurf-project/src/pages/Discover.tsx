@@ -63,7 +63,7 @@ const mockProfiles = [
 ];
 
 const Discover: React.FC = () => {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const { addMatch } = useMatch();
