@@ -86,7 +86,7 @@ const Discover: React.FC = () => {
     setCurrentIndex(0);
   }, [filteredProfiles]);
 
-  const currentProfile = filteredProfiles[currentIndex];
+  const currentProfile = filteredProfiles[currentIndex] || mockProfiles[0];
 
   const handleLike = () => {
     if (isAnimating) return;
