@@ -10,12 +10,17 @@ import Chat from './pages/Chat';
 import Profile from './pages/Profile';
 function AppRoutes() {
   const { user, profileComplete } = useAuth();
+  console.log('AppRoutes - user:', user, 'profileComplete:', profileComplete);
+  
   if (!user) {
+    console.log('Rendering Auth component');
     return <Auth />;
   }
   if (!profileComplete) {
+    console.log('Rendering ProfileSetup component');
     return <ProfileSetup />;
   }
+  console.log('Rendering main app with routes');
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50">
       <Navbar />

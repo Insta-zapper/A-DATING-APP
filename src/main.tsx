@@ -12,6 +12,9 @@ window.addEventListener('unhandledrejection', (event) => {
   console.error('Unhandled Promise Rejection:', event.reason);
 });
 
+// Add debug logging
+console.log('Starting app...');
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
