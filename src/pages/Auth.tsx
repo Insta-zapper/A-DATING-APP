@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Heart, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.simple';
 
 const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
