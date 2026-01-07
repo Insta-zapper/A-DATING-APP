@@ -10,7 +10,10 @@ const Profile: React.FC = () => {
     hobbies: profile?.hobbies || '',
     interests: profile?.interests || [],
     location: profile?.location || '',
-    pronouns: profile?.pronouns || ''
+    pronouns: profile?.pronouns || '',
+    ageRangeMin: profile?.ageRangeMin || 18,
+    ageRangeMax: profile?.ageRangeMax || 65,
+    maxDistance: profile?.maxDistance || 20
   });
 
   const handleSave = async () => {
@@ -26,6 +29,15 @@ const Profile: React.FC = () => {
         : [...prev.interests, interest]
     }));
   };
+
+  // Generate distance options
+  const distanceOptions = [];
+  for (let i = 5; i <= 20; i += 5) {
+    distanceOptions.push(i);
+  }
+  for (let i = 30; i <= 100; i += 10) {
+    distanceOptions.push(i);
+  }
 
   const commonInterests = [
     'Travel', 'Cooking', 'Music', 'Movies', 'Reading', 'Fitness', 
@@ -289,6 +301,106 @@ const Profile: React.FC = () => {
                 </span>
               </div>
             </div>
+          </div>
+
+          {/* Discovery Preferences */}
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-800">Discovery Preferences</h3>
+              {!isEditing && (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="text-primary-600 hover:text-primary-700"
+                >
+                  <Edit2 className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+
+            {isEditing ? (
+              <div className="space-y-4">
+                {/* Age Range */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Age Range: {editData.ageRangeMin} - {editData.ageRangeMax === 65 ? '65+' : editData.ageRangeMax}
+                  </label>
+                  <div className="space-y-2">
+                    <input
+                      type="range"
+                      min="18"
+                      max="65"
+                      value={editData.ageRangeMin}
+                      onChange={(e) => {
+                        const newMin = parseInt(e.target.value);
+                        const maxAge = Math.max(newMin + 2, editData.ageRangeMax);
+                        setEditData(prev => ({ ...prev, ageRangeMin: newMin, ageRangeMax: maxAge }));
+                      }}
+                      className="w-full"
+                    />
+                    <input
+                      type="range"
+                      min="18"
+                      max="65"
+                      value={editData.ageRangeMax}
+                      onChange={(e) => {
+                        const newMax = parseInt(e.target.value);
+                        const minAge = Math.min(editData.ageRangeMin, newMax - 2);
+                        setEditData(prev => ({ ...prev, ageRangeMin: minAge, ageRangeMax: newMax }));
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Distance */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Max Distance: {editData.maxDistance} miles
+                  </label>
+                  <select
+                    value={editData.maxDistance}
+                    onChange={(e) => setEditData(prev => ({ ...prev, maxDistance: parseInt(e.target.value) }))}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    {distanceOptions.map(distance => (
+                      <option key={distance} value={distance}>
+                        {distance} miles
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => setIsEditing(false)}
+                    className="btn-secondary"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    className="btn-primary"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Age Range:</span>
+                  <span className="font-medium">
+                    {profile.ageRangeMin || 18} - {profile.ageRangeMax === 65 ? '65+' : (profile.ageRangeMax || 65)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Max Distance:</span>
+                  <span className="font-medium">
+                    {profile.maxDistance || 20} miles
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Account Stats */}
